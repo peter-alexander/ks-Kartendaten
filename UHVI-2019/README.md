@@ -9,8 +9,10 @@ Quelle: https://www.wien.gv.at/data/ogd/ma20/averageurbanheatvulnerabilityindex.
 - Geometriequelle (fest auf Commit gepinnt): https://github.com/tobiriepl/Livability/blob/9c532d0baf692cf314522ee899735d80310fdf0e/City%20data/Census%20Districts/ZAEHLBEZIRKOGD.json
 - Aktueller amtlicher WFS-Layer: ogdwien:ZAEHLBEZIRKOGD
 - Die Erzeugung wird durch build.mjs reproduzierbar beschrieben. Der Build muss alle 250 Kennungen sowohl in der Archivgeometrie als auch im aktuellen WFS zuordnen können. Der aktuelle WFS wird nur für einen Vergleich herangezogen.
-- Die Datei geometry-comparison.json dokumentiert die Anzahl exakter Unterschiede der Koordinatenarrays zwischen der archivierten und aktuellen Geometrie. Eine topologische Gleichheitsanalyse oder Verifikation von Zählbezirksgrenzen aus 2019 ist dies nicht.
+- Die Datei geometry-comparison.json dokumentiert einen metrischen Vergleich beider Polygonfassungen anhand der symmetrischen Flächendifferenz (Shapely, UTM Zone 33N). Der Vergleich überprüft keine Originalgrenzen aus 2019.
 - Zuordnung: SUB_DISTRICT_CODE_VIE = 90000 + Number(ZBEZ).
 - Quellenangabe: Datenquelle Stadt Wien – data.wien.gv.at; UHVI: ECOTEN 2019; Geometriekopie: Stadt Wien OGD. Die OGD-Daten sind laut Herausgeber CC BY 4.0.
 
 Der UHVI ist ein normierter, modellbasierter Index und kein orts- oder personengenaues Hitze-/Gesundheitsrisiko.
+
+Ausführung: Zuerst `node UHVI-2019/build.mjs` (Download und Zuordnung), dann `python UHVI-2019/compare-geometry.py` nach Installation von `shapely` und `pyproj` (metrischer Vergleich). GitHub Actions erledigt beide Schritte und committet die Ergebnisse auf main.
