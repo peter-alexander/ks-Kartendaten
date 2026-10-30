@@ -1,0 +1,29 @@
+name: Verify and generate UHVI 2019 GeoJSON
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'UHVI-2019/build.mjs'
+      - '.github/workflows/uhvi-2019.yml'
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Compare official current WFS and generate GeoJSON
+        run: node UHVI-2019/build.mjs
+      - name: Commit verified dataset to main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add UHVI-2019/uhvi-2019.geojson UHVI-2019/geometry-comparison.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Publish verified UHVI 2019 GeoJSON and WFS comparison"
+            git push
+          fi
